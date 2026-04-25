@@ -12,35 +12,22 @@ const navItems = [
   { to: "/maintenance", label: "Maintenance", icon: "🚧" },
 ];
 
-export default function Sidebar({ isOpen, closeSidebar }) {
+export default function Header({ onToggleSidebar }) {
   return (
-    <>
-      <aside className={`admin-sidebar ${isOpen ? "open" : ""}`}>
-        <div className="brand-block">
-          <p className="brand-kicker">Dating Admin</p>
-          <h2>Social Taste</h2>
-          <p className="brand-subtitle">Smart matchmaking operations</p>
+    <header className="admin-header">
+      <div className="header-left">
+        <button className="menu-toggle" onClick={onToggleSidebar} aria-label="Toggle sidebar">
+          ☰
+        </button>
+        <div>
+          <p className="header-kicker">Admin Console</p>
+          <h1>Overview</h1>
         </div>
-
-        <nav className="sidebar-nav">
-          {navItems.map((item) => (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              onClick={closeSidebar}
-              className={({ isActive }) =>
-                `sidebar-link ${isActive ? "active" : ""}`
-              }
-              end={item.to === "/dashboard"}
-            >
-              <span aria-hidden>{item.icon}</span>
-              <span>{item.label}</span>
-            </NavLink>
-          ))}
-        </nav>
-      </aside>
-
-      {isOpen && <button className="mobile-overlay" onClick={closeSidebar} aria-label="Close sidebar" />}
-    </>
+</div>
+        <div className="header-right">
+        <span className="status-pill">Live • Updated every 5 min</span>
+        <button className="primary-action">Export Report</button>
+      </div>
+    </header>
   );
 }
