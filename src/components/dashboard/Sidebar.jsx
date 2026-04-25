@@ -16,7 +16,7 @@ export default function Sidebar({ isOpen, closeSidebar }) {
     <>
       <aside className={`admin-sidebar ${isOpen ? "open" : ""}`}>
         <div className="brand-block">
-          <p className="brand-kicker">Dating Admin</p>
+          {/* <p className="brand-kicker">Dating Admin</p> */}
           <h2>Social Taste</h2>
           <p className="brand-subtitle">Smart matchmaking operations</p>
         </div>
