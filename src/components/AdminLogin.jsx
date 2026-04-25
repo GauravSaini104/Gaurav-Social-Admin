@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function AdminLogin() {
   const [showSplash, setShowSplash] = useState(true);
@@ -15,7 +16,12 @@ export default function AdminLogin() {
   return (
     <div style={styles.container}>
       <style>{animations}</style>
-      {showSplash ? <SplashScreen /> : <LoginScreen navigate={navigate} />}
+
+      {/* TOASTER */}
+      <Toaster position="top-right" />
+
+      {showSplash && <SplashScreen />}
+      {!showSplash && <LoginScreen navigate={navigate} />}
     </div>
   );
 }
@@ -31,19 +37,87 @@ const SplashScreen = () => {
 };
 
 const LoginScreen = ({ navigate }) => {
+  const [emailOrPhone, setEmailOrPhone] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleLogin = async () => {
+    console.log("Button clicked");
+
+    if (!emailOrPhone || !password) {
+      return toast.error("Please enter email & password");
+    }
+
+    setLoading(true);
+
+    try {
+      const res = await fetch(
+        "https://social-taste-matrimony.onrender.com/api/auth/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            emailOrPhone,
+            password,
+          }),
+        }
+      );
+
+      const data = await res.json();
+
+      if (res.ok) {
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("user", JSON.stringify(data));
+
+        toast.success("Login successful 🎉");
+
+        setTimeout(() => {
+          navigate("/dashboard");
+        }, 1000);
+      } else {
+        toast.error(data.message || "Login failed");
+      }
+    } catch (err) {
+      console.error("Login Error:", err);
+      toast.error("Something went wrong");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div style={{ ...styles.card, animation: "slideUp 0.8s ease" }}>
       <h2 style={styles.heading}>Welcome Back</h2>
       <p style={styles.text}>Login to your admin panel</p>
 
-      <input type="email" placeholder="Email Address" style={styles.input} />
-      <input type="password" placeholder="Password" style={styles.input} />
+      <input
+        type="email"
+        placeholder="Email Address"
+        style={styles.input}
+        value={emailOrPhone}
+        onChange={(e) => setEmailOrPhone(e.target.value)}
+      />
 
-      <button 
-        onClick={() => navigate("/dashboard")}
-        style={styles.button}
+      <input
+        type="password"
+        placeholder="Password"
+        style={styles.input}
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
+
+      <button
+        onClick={handleLogin}
+        disabled={loading}
+        style={{
+          ...styles.button,
+          opacity: loading ? 0.6 : 1,
+          cursor: loading ? "not-allowed" : "pointer",
+        }}
       >
-        LOGIN
+        {loading ? "Logging in..." : "LOGIN"}
       </button>
 
       <p style={styles.footer}>Forgot password?</p>
@@ -69,6 +143,7 @@ const styles = {
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "black",
+    pointerEvents: "none", // ✅ click issue fix
   },
   title: {
     fontSize: "48px",
@@ -121,7 +196,6 @@ const styles = {
     border: "none",
     borderRadius: "8px",
     fontWeight: "bold",
-    cursor: "pointer",
   },
   footer: {
     marginTop: "15px",
