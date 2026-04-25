@@ -1,14 +1,14 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-
 import AdminLogin from "./components/AdminLogin";
-// import Dashboard from "./components/Dashboard";
+import Dashboard from "./pages/Dashboard";
+
 
 function App() {
   return (
     <Routes>
       <Route path="/" element={<AdminLogin />} />
-      {/* <Route path="/dashboard" element={<Dashboard />} /> */}
+      <Route path="/dashboard" element={<Dashboard />} />
     </Routes>
   );
 }
