@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"; // ✅ useEffect add
+import React, { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
@@ -15,6 +15,15 @@ const navItems = [
 
 export default function Header({ onToggleSidebar }) {
   const navigate = useNavigate();
+  const [profile, setProfile] = useState(null);
+
+  // ✅ load from localStorage first (fast render)
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setProfile(JSON.parse(storedUser));
+    }
+  }, []);
 
   // ✅ GET PROFILE API CALL
   useEffect(() => {
@@ -28,7 +37,7 @@ export default function Header({ onToggleSidebar }) {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`, // ✅ token pass
+              Authorization: `Bearer ${token}`,
             },
           }
         );
@@ -36,9 +45,8 @@ export default function Header({ onToggleSidebar }) {
         const data = await res.json();
 
         if (res.ok) {
-          // optional: save/update user data
           localStorage.setItem("user", JSON.stringify(data));
-          console.log("Profile Data:", data);
+          setProfile(data); // ✅ REAL DATA SET
         } else {
           toast.error("Failed to fetch profile");
         }
@@ -84,39 +92,25 @@ export default function Header({ onToggleSidebar }) {
           Live • Updated every 5 min
         </span>
 
-        <button
-          className="icon-btn notification-btn"
-          type="button"
-          aria-label="Notifications"
-          title="Notifications"
-        >
-          <span aria-hidden>🔔</span>
-          <span className="notification-badge" aria-hidden>
-            3
-          </span>
+        <button className="icon-btn notification-btn" type="button">
+          <span>🔔</span>
+          <span className="notification-badge">3</span>
         </button>
 
-        <button
-          className="icon-btn profile-btn"
-          type="button"
-          aria-label="Profile"
-          title="Profile"
-        >
+        <button className="icon-btn profile-btn" type="button">
           <img
-            src="https://pxcollections.co.in/wp-content/uploads/2025/08/instagram-dp-download-7.jpg"
+            src={profile?.primaryPhoto}
             alt=""
             className="avatar"
             width="32"
             height="32"
           />
-          <span className="sr-only">Open profile menu</span>
         </button>
 
         <button
           className="primary-action logout-btn"
           type="button"
           onClick={handleLogout}
-          aria-label="Log out"
         >
           Log Out
         </button>
