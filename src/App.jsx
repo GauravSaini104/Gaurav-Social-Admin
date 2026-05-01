@@ -5,7 +5,7 @@ import AdminLogin from "./components/AdminLogin";
 import AdminLayout from "./layouts/AdminLayout";
 import DashboardOverview from "./pages/admin/DashboardOverview";
 import UsersPage from "./pages/admin/UsersPage";
-import MatchesPage from "./pages/admin/MatchesPage";
+import SuccessStories from "./pages/admin/SuccessStories";
 import SubscriptionsPage from "./pages/admin/SubscriptionsPage";
 import ReportsPage from "./pages/admin/ReportsPage";
 import ModerationPage from "./pages/admin/ModerationPage";
@@ -13,6 +13,7 @@ import SettingsPage from "./pages/admin/SettingsPage";
 import MaintenancePage from "./pages/shared/MaintenancePage";
 import NotFoundPage from "./pages/shared/NotFoundPage";
 import ProtectedRoute from "./components/ProtectedRoute";
+import SuccessStoriesPage from "./pages/admin/SuccessStories";
 
 function App() {
   return (
@@ -33,7 +34,7 @@ function App() {
         <Route index element={<DashboardOverview />} />
 
         <Route path="users" element={<UsersPage />} />
-        <Route path="matches" element={<MatchesPage />} />
+        <Route path="success-stories" element={<SuccessStoriesPage />} />
         <Route path="subscriptions" element={<SubscriptionsPage />} />
         <Route path="moderation" element={<ModerationPage />} />
         <Route path="reports" element={<ReportsPage />} />

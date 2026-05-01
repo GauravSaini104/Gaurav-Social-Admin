@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 const navItems = [
   { to: "/dashboard", label: "Overview", icon: "📊" },
   { to: "/dashboard/users", label: "Members", icon: "👥" },
-  { to: "/dashboard/matches", label: "Matches", icon: "💞" },
+  { to: "/dashboard/SuccessStories", label: "Success Stories", icon: "💞" },
   { to: "/dashboard/subscriptions", label: "Plans", icon: "💳" },
   { to: "/dashboard/moderation", label: "Moderation", icon: "🛡️" },
   { to: "/dashboard/reports", label: "Reports", icon: "📁" },
