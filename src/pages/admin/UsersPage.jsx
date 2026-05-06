@@ -17,7 +17,8 @@ import {
   Settings,
   Award,
 } from "lucide-react";
-
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 // --- API CONFIG ---
 const TOKEN =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5ZjJlNGE0MTFlYjVlNWM4ODdmZTJlZCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3NzUyNzA5MSwiZXhwIjoxNzgwMTE5MDkxfQ.7mpF0CvlFLX4Ky5iPH592Mxl0SqVoFyLTIk4wuDzkfw";
@@ -30,7 +31,7 @@ export default function UsersPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [editingUser, setEditingUser] = useState(null);
   const [updateLoading, setUpdateLoading] = useState(false);
-
+const [deleteUserId, setDeleteUserId] = useState(null);
   // 1. GET ALL USERS
   const fetchUsers = async () => {
     try {
@@ -62,20 +63,19 @@ export default function UsersPage() {
     setFilteredUsers(results);
   }, [searchTerm, users]);
 
-  // 2. DELETE USER
-  const handleDelete = async (id) => {
-    if (!window.confirm("delete")) return;
-    try {
-      await fetch(`${BASE_URL}/user/${id}`, {
-        method: "DELETE",
-        headers: { Authorization: `Bearer ${TOKEN}` },
-      });
-      setUsers(users.filter((u) => u._id !== id));
-      alert("User Deleted Successfully!");
-    } catch (error) {
-      alert("Delete failed!");
-    }
-  };
+ const handleDelete = async () => {
+  try {
+    await fetch(`${BASE_URL}/user/${deleteUserId}`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${TOKEN}` },
+    });
+    setUsers(users.filter((u) => u._id !== deleteUserId));
+    setDeleteUserId(null);
+    toast.success("User Deleted Successfully!");
+  } catch (error) {
+    toast.error("Delete failed!");
+  }
+};
 
   // 3. UPDATE FULL PROFILE (PUT)
   const handleUpdate = async (e) => {
@@ -110,16 +110,42 @@ export default function UsersPage() {
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; gap: 20px; flex-wrap: wrap; }
         .title-area h1 { color: #ffcc00; margin: 0; text-transform: uppercase; letter-spacing: 2px; font-size: 28px; }
         .search-box { position: relative; width: 100%; max-width: 400px; }
-        .search-box input { width: 100%; background: #111; border: 1px solid #333; padding: 12px 15px 12px 45px; border-radius: 10px; color: #fff; outline: none; transition: 0.3s; }
-        .search-box input:focus { border-color: #ffcc00; box-shadow: 0 0 10px rgba(255, 204, 0, 0.1); }
+        .search-box input { width: 100%; background: #111; border: 1px solid #333; padding: 12px 15px 12px 45px; border-radius: 10px; color: #aa3a3a; outline: none; transition: 0.3s; }
+        .search-box input:focus { border-color: #f5f0f0; box-shadow: 0 0 10px rgba(233, 118, 25, 0.1); }
         
         .users-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); gap: 25px; }
-        .user-card { background: #0a0a0a; border: 1px solid #222; border-radius: 20px; padding: 20px; transition: 0.4s; position: relative; }
-        .user-card:hover { border-color: #ffcc00; transform: translateY(-5px); }
+.user-card {
+  background: #0a0a0a;
+  border-radius: 20px;
+  padding: 20px;
+  position: relative;
+  overflow: visible;
+}
+ .user-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  padding: 2px;
+  background: linear-gradient(90deg, transparent, #fff, transparent);
+  background-size: 200% 100%;
+  animation: borderMove 10s linear infinite;
+  
+  pointer-events: none; /* <--- ADD THIS LINE EXACTLY HERE */
+
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+}
+@keyframes borderMove {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+          .user-card:hover { border-color: #ffffff; transform: translateY(-5px); }
         .user-header { display: flex; gap: 15px; align-items: center; }
         .user-img { width: 75px; height: 75px; border-radius: 15px; object-fit: cover; border: 2px solid #333; }
         .actions { display: flex; gap: 10px; margin-top: 20px; }
-        .btn-edit { flex: 1; background: #ffcc00; color: #000; border: none; padding: 12px; border-radius: 10px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-edit { flex: 1; background: #ffcc00; color: #000; border: none; padding: 12px; border-radius: 50px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .btn-delete { background: #ff44441a; color: #ff4444; border: 1px solid #ff4444; padding: 10px; border-radius: 10px; cursor: pointer; }
 
         /* FULL SCROLLABLE MODAL */
@@ -145,7 +171,7 @@ export default function UsersPage() {
       <div className="header">
         <div className="title-area">
           <h1>Members Database</h1>
-          <p style={{ color: "#555", fontSize: "13px" }}>
+          <p style={{ color: "#ffffff", fontSize: "13px" }}>
             Management & Full Profile Control
           </p>
         </div>
@@ -218,16 +244,16 @@ export default function UsersPage() {
               <div className="actions">
                 <button
                   className="btn-edit"
-                  onClick={() => setEditingUser(user)}
+             onClick={() => setEditingUser(user)}
                 >
                   <Edit3 size={16} /> Edit All Info
                 </button>
-                <button
-                  className="btn-delete"
-                  onClick={() => handleDelete(user._id)}
-                >
-                  <Trash2 size={16} />
-                </button>
+               <button
+  className="btn-delete"
+  onClick={() => setDeleteUserId(user._id)}
+>
+  <Trash2 size={16} />
+</button>
               </div>
             </div>
           ))}
@@ -693,6 +719,63 @@ export default function UsersPage() {
           </div>
         </div>
       )}
+      {/* DELETE CONFIRMATION MODAL */}
+{deleteUserId && (
+  <div className="modal-overlay">
+    <div
+      style={{
+        background: "#111",
+        padding: "30px",
+        borderRadius: "15px",
+        border: "1px solid #ff4444",
+        textAlign: "center",
+        width: "100%",
+        maxWidth: "400px",
+      }}
+    >
+      <h3 style={{ color: "#ff4444", marginBottom: "15px" }}>
+        Confirm Delete
+      </h3>
+      <p style={{ color: "#ccc", marginBottom: "25px" }}>
+        Are you sure you want to delete this user?
+      </p>
+
+      <div style={{ display: "flex", gap: "10px" }}>
+        <button
+          style={{
+            flex: 1,
+            padding: "10px",
+            background: "#222",
+            border: "1px solid #555",
+            color: "#fff",
+            borderRadius: "8px",
+            cursor: "pointer",
+          }}
+          onClick={() => setDeleteUserId(null)}
+        >
+          Cancel
+        </button>
+
+        <button
+          style={{
+            flex: 1,
+            padding: "10px",
+            background: "#ff4444",
+            border: "none",
+            color: "#fff",
+            borderRadius: "8px",
+            cursor: "pointer",
+          }}
+          onClick={handleDelete}
+        >
+          Yes, Delete
+        </button>
+      </div>
     </div>
+  </div>
+)}
+<ToastContainer position="top-right" autoClose={3000} />
+    </div>
+    
   );
 }
