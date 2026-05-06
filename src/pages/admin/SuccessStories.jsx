@@ -82,6 +82,7 @@ export default function SuccessStoriesPage() {
   const removePhoto = (index) => {
     const photoToRemove = previews[index];
 
+
     // 1. Agar ye nayi selected file hai (Blob URL hai)
     if (photoToRemove.startsWith('blob:')) {
       // Humein find karna hoga ki ye form.images mein kaunse index par hai

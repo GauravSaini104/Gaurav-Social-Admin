@@ -6,8 +6,8 @@ const navItems = [
   { to: "/dashboard", label: "Overview", icon: "📊" },
   { to: "/dashboard/users", label: "Members", icon: "👥" },
   { to: "/dashboard/SuccessStories", label: "Success Stories", icon: "💞" },
-  { to: "/dashboard/subscriptions", label: "Plans", icon: "💳" },
-  { to: "/dashboard/moderation", label: "Moderation", icon: "🛡️" },
+  { to: "/dashboard/spam-control", label: "Spam Control", icon: "💳" },
+  { to: "/dashboard/verified-document", label: "Verified Documents", icon: "📄" },
   { to: "/dashboard/reports", label: "Reports", icon: "📁" },
   { to: "/dashboard/settings", label: "Settings", icon: "⚙️" },
   { to: "/maintenance", label: "Maintenance", icon: "🚧" },
@@ -32,7 +32,7 @@ export default function Header({ onToggleSidebar }) {
         const token = localStorage.getItem("token");
 
         const res = await fetch(
-          "https://social-taste-matrimony.onrender.com/api/auth/user/69eb51f0bbf97301c832b058",
+          "https://social-taste-matrimony.onrender.com/api/auth/user/69f1ec87ccc0ebf5c5e3a8df",
           {
             method: "GET",
             headers: {

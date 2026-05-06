@@ -6,14 +6,16 @@ import AdminLayout from "./layouts/AdminLayout";
 import DashboardOverview from "./pages/admin/DashboardOverview";
 import UsersPage from "./pages/admin/UsersPage";
 import SuccessStories from "./pages/admin/SuccessStories";
-import SubscriptionsPage from "./pages/admin/SubscriptionsPage";
+
 import ReportsPage from "./pages/admin/ReportsPage";
-import ModerationPage from "./pages/admin/ModerationPage";
+
 import SettingsPage from "./pages/admin/SettingsPage";
 import MaintenancePage from "./pages/shared/MaintenancePage";
 import NotFoundPage from "./pages/shared/NotFoundPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import SuccessStoriesPage from "./pages/admin/SuccessStories";
+import SpamControl from "./pages/admin/Spamcontrol";
+import VerifiedDocument from "./pages/admin/verifieddocument";
 
 function App() {
   return (
@@ -35,8 +37,8 @@ function App() {
 
         <Route path="users" element={<UsersPage />} />
         <Route path="success-stories" element={<SuccessStoriesPage />} />
-        <Route path="subscriptions" element={<SubscriptionsPage />} />
-        <Route path="moderation" element={<ModerationPage />} />
+        <Route path="spam-control" element={<SpamControl />} />
+        <Route path="verified-document" element={<VerifiedDocument />} />
         <Route path="reports" element={<ReportsPage />} />
         <Route path="settings" element={<SettingsPage />} />
       </Route>
