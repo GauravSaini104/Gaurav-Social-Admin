@@ -524,3 +524,571 @@
     line-height: 16px;
   }
 }
+
+
+
+.live-indicator {
+  width: 8px;
+  height: 8px;
+  background-color: #22c55e;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 8px;
+  box-shadow: 0 0 8px #22c55e;
+  animation: pulse-green 2s infinite;
+}
+
+@keyframes pulse-green {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+}
+
+/* 2. Notification Button & Ring Animation */
+.premium-icon-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 8px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s ease;
+  color: var(--muted);
+}
+
+.premium-icon-svg {
+  width: 22px;
+  height: 22px;
+}
+
+.notification-wrapper:hover {
+  background: rgba(250, 204, 21, 0.1);
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.notification-wrapper:hover .premium-icon-svg {
+  animation: bell-ring 0.8s both ease-in-out;
+}
+
+@keyframes bell-ring {
+  0%, 100% { transform: rotate(0); }
+  20% { transform: rotate(15deg); }
+  40% { transform: rotate(-15deg); }
+  60% { transform: rotate(10deg); }
+  80% { transform: rotate(-10deg); }
+}
+
+.notification-glow-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: #ef4444;
+  color: white;
+  font-size: 10px;
+  font-weight: bold;
+  min-width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 2px solid #000;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+}
+
+/* 3. Premium Profile */
+.premium-profile-trigger {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.premium-avatar-img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  transition: all 0.3s ease;
+  object-fit: cover;
+}
+
+.premium-profile-trigger:hover .premium-avatar-img {
+  border-color: var(--accent);
+  box-shadow: 0 0 15px var(--accent-soft);
+  transform: scale(1.05);
+}
+
+/* 4. Sleek Logout Button */
+.premium-logout-action {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(135deg, #facc15 0%, #eab308 100%);
+  color: #000;
+  padding: 8px 16px;
+  border-radius: 12px;
+  border: none;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 15px rgba(250, 204, 21, 0.2);
+}
+
+.logout-arrow-icon {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.3s ease;
+}
+
+.premium-logout-action:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(250, 204, 21, 0.4);
+  filter: brightness(1.1);
+}
+
+.premium-logout-action:hover .logout-arrow-icon {
+  transform: translateX(3px);
+}
+
+.premium-logout-action:active {
+  transform: translateY(0);
+}
+
+.avatar-wrapper {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  overflow: hidden; /* Taki image bahar na nikle */
+  border: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--panel-soft);
+  transition: all 0.3s ease;
+}
+
+.premium-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Image ko stretch hone se rokta hai */
+  display: block;
+}
+
+.default-avatar {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+  background: rgba(250, 204, 21, 0.1);
+}
+
+.default-avatar svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Hover effect on wrapper */
+.premium-profile-trigger:hover .avatar-wrapper {
+  border-color: var(--accent);
+  box-shadow: 0 0 15px var(--accent-soft);
+  transform: scale(1.05);
+}
+
+/* Notification badge alignment fix (Optional) */
+.notification-glow-badge {
+    pointer-events: none; /* Badge icon click ko disturb na kare */
+}
+
+.header-kicker {
+  text-transform: uppercase;
+  letter-spacing: 2px; /* Thoda gap premium lagta hai */
+  font-weight: 700;
+  font-size: 10px !important;
+  color: var(--accent) !important; /* Gold color */
+  margin-bottom: 2px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  
+  /* Entrance Animation */
+  animation: slideInText 0.6s ease-out both;
+}
+
+/* 2. Overview Text */
+.admin-header h1 {
+  font-size: 26px !important;
+  font-weight: 800 !important;
+  color: #ffffff;
+  margin: 0;
+  letter-spacing: -0.5px;
+  position: relative;
+  
+  /* Entrance Animation with delay */
+  animation: slideInText 0.8s ease-out 0.2s both;
+  
+  /* Subtle glow effect */
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+}
+
+/* Hover effect: Jab title par mouse jaye to thoda chamke */
+.admin-header h1:hover {
+  color: var(--accent);
+  transition: color 0.4s ease;
+  cursor: default;
+}
+
+/* --- Entrance Animation Keyframes --- */
+@keyframes slideInText {
+  0% {
+    opacity: 0;
+    transform: translateX(-20px);
+    filter: blur(5px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+    filter: blur(0);
+  }
+}
+
+/* Optional: Admin Console ke aage ek chota dot jo blink kare */
+.header-kicker::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background: var(--accent);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--accent);
+}
+
+.admin-sidebar-premium {
+  position: fixed;
+  inset: 0 auto 0 0;
+  width: 280px;
+  background: linear-gradient(165deg, rgba(30, 25, 0, 0.96) 0%, rgba(10, 10, 10, 0.99) 100%);
+  backdrop-filter: blur(25px) saturate(160%);
+  border-right: 1px solid rgba(250, 204, 21, 0.2);
+  padding: 30px 20px;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(-100%);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+
+
+.admin-sidebar-premium.open {
+  transform: translateX(0);
+}
+
+/* Brand Section */
+.brand-section {
+  margin-bottom: 40px;
+  padding: 0 10px;
+}
+
+.brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.logo-icon {
+  background: linear-gradient(135deg, #facc15, #eab308);
+  color: #000;
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  font-weight: 900;
+  font-size: 18px;
+  box-shadow: 0 0 20px rgba(250, 204, 21, 0.3);
+}
+
+.brand-name {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.5px;
+}
+
+.brand-status {
+  margin: 0;
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Navigation Links */
+.premium-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-grow: 1;
+}
+
+.premium-link {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 16px;
+  color: var(--muted);
+  text-decoration: none;
+  border-radius: 14px;
+  font-weight: 500;
+  position: relative;
+  transition: all 0.3s ease;
+  
+  /* Staggered Entrance Animation */
+  opacity: 0;
+  animation: slideInNav 0.5s ease forwards;
+  animation-delay: calc(var(--i) * 0.05s);
+}
+
+@keyframes slideInNav {
+  from { opacity: 0; transform: translateX(-20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.nav-icon-svg {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.3s ease;
+}
+
+/* Hover State */
+.premium-link:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+}
+
+.premium-link:hover .nav-icon-svg {
+  transform: scale(1.1);
+  color: var(--accent);
+}
+
+/* Active State */
+.premium-link.active {
+  background: rgba(250, 204, 21, 0.1);
+  color: var(--accent);
+}
+
+.premium-link.active .nav-icon-svg {
+  color: var(--accent);
+  filter: drop-shadow(0 0 5px var(--accent));
+}
+
+.active-indicator {
+  position: absolute;
+  left: 0;
+  width: 4px;
+  height: 0%;
+  background: var(--accent);
+  border-radius: 0 4px 4px 0;
+  transition: height 0.3s ease;
+}
+
+.premium-link.active .active-indicator {
+  height: 60%;
+}
+
+/* Footer Badge */
+.sidebar-footer {
+  margin-top: auto;
+  padding-top: 20px;
+}
+
+.pro-badge {
+  font-size: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--muted);
+  padding: 6px 12px;
+  border-radius: 50px;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Mobile Overlay */
+.mobile-overlay-glass {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 90;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Responsive fix */
+@media (min-width: 1024px) {
+  .admin-sidebar-premium {
+    transform: translateX(0);
+  }
+  .mobile-overlay-glass {
+    display: none;
+  }
+  
+}
+
+/* Page Entrance */
+.animate-in {
+    animation: fadeIn 0.8s ease-out forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* 1. Mini Bars Grow Animation */
+.mini-bar {
+    transition: height 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* 2. Line Chart Draw Animation */
+.animate-line {
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    animation: drawLine 2.5s ease-out forwards;
+    animation-delay: 0.5s;
+}
+
+@keyframes drawLine {
+    to { stroke-dashoffset: 0; }
+}
+
+/* 3. Funnel Bar Fill Animation */
+.animated-fill {
+    transition: width 1.2s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* 4. Activity List staggered fade */
+.panel-list li {
+    opacity: 0;
+    transform: translateX(-10px);
+    animation: listFadeIn 0.5s ease-out forwards;
+}
+
+@keyframes listFadeIn {
+    to { opacity: 1; transform: translateX(0); }
+}
+
+/* 5. Stat Card Hover Glow */
+.stat-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--accent);
+    box-shadow: 0 10px 30px rgba(250, 204, 21, 0.15);
+    transition: all 0.3s ease;
+}
+
+/* --- EXTRA PREMIUM STYLES (Bottom-of-file overrides) --- */
+
+/* 1. Cards Upgrade: Border aur Glow */
+.stat-card, .panel-card {
+    border: 1px solid rgba(250, 204, 21, 0.2) !important; /* Gold soft border */
+    background: rgba(15, 15, 15, 0.7) !important;
+    backdrop-filter: blur(12px);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.stat-card:hover, .panel-card:hover {
+    border-color: rgba(250, 204, 21, 0.5) !important;
+    transform: translateY(-5px) scale(1.01);
+    box-shadow: 0 15px 40px rgba(250, 204, 21, 0.1) !important;
+}
+
+/* 2. Text Upgrade: Numbers aur Labels */
+.stat-card p {
+    color: #888 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1.2px !important;
+    font-weight: 700 !important;
+}
+
+.stat-card h3 {
+    font-size: 36px !important;
+    font-weight: 800 !important;
+    background: linear-gradient(180deg, #ffffff 0%, #bbbbbb 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 8px 0 !important;
+}
+
+/* 3. Delta Badges (Pill Look) */
+.delta-up, .delta-down {
+    padding: 2px 8px !important;
+    border-radius: 6px !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+}
+
+.delta-up { background: rgba(16, 185, 129, 0.1) !important; }
+.delta-down { background: rgba(244, 63, 94, 0.1) !important; }
+
+/* 4. Graph Animations */
+
+/* Mini Bars Grow Animation */
+.mini-bar {
+    transform-origin: bottom;
+    animation: growBar 1.5s ease-out forwards;
+}
+
+@keyframes growBar {
+    from { transform: scaleY(0); }
+    to { transform: scaleY(1); }
+}
+
+/* Main Line Chart Draw Animation */
+.animate-line {
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    animation: drawLine 3s ease-out forwards;
+    animation-delay: 0.5s;
+}
+
+@keyframes drawLine {
+    to { stroke-dashoffset: 0; }
+}
+
+/* Conversion Funnel Fill Animation */
+.funnel-fill {
+    transform-origin: left;
+    animation: slideRight 1.5s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
+@keyframes slideRight {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+}
+
+/* Operational Highlights List Animation */
+.panel-list li {
+    opacity: 0;
+    transform: translateX(-10px);
+    animation: fadeInUp 0.5s ease-out forwards;
+}
+
+/* Delay for each list item */
+.panel-list li:nth-child(1) { animation-delay: 0.1s; }
+.panel-list li:nth-child(2) { animation-delay: 0.2s; }
+.panel-list li:nth-child(3) { animation-delay: 0.3s; }
+.panel-list li:nth-child(4) { animation-delay: 0.4s; }
+
+@keyframes fadeInUp {
+    to { opacity: 1; transform: translateX(0); }
+}

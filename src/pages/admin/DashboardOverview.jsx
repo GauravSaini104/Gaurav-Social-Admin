@@ -1,4 +1,25 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+
+// --- Count Up Logic Component ---
+const AnimatedNumber = ({ value }) => {
+    const [count, setCount] = React.useState(0);
+    const target = parseInt(value.replace(/,/g, ""));
+    React.useEffect(() => {
+        let start = 0;
+        const duration = 2000; // 2 seconds animation
+        const increment = target / (duration / 16);
+        const timer = setInterval(() => {
+            start += increment;
+            if (start >= target) {
+                setCount(target);
+                clearInterval(timer);
+            } else { setCount(Math.floor(start)); }
+        }, 16);
+        return () => clearInterval(timer);
+    }, [target]);
+    return <span>{count.toLocaleString()}</span>;
+};
+
 
 const stats = [
     { label: "New Members (24h)", value: "326", delta: "+12.4%", trend: [6, 8, 7, 9, 10, 12, 14] },
@@ -24,6 +45,7 @@ const activityFeed = [
     "Delhi and Bengaluru crossed 80% response-rate on match prompts.",
     "Push campaign ‘Weekend Spark’ generated 1.8x click-through rate.",
 ];
+
 const toPoints = (series) =>
     series
         .map((value, index) => {
@@ -34,19 +56,29 @@ const toPoints = (series) =>
         .join(" ");
 
 export default function DashboardOverview() {
+    const [isLoaded, setIsLoaded] = useState(false);
+
+    useEffect(() => {
+        setIsLoaded(true);
+    }, []);
+
     return (
-        <section className="page-grid">
+        <section className={`page-grid ${isLoaded ? "animate-in" : ""}`}>
+            {/* Stats Cards */}
             <div className="stats-grid">
                 {stats.map((item) => (
                     <article key={item.label} className="stat-card">
                         <p>{item.label}</p>
-                        <h3>{item.value}</h3>
+                       <h3><AnimatedNumber value={item.value} /></h3>
                         <span className={item.danger ? "delta-down" : "delta-up"}>{item.delta} vs last week</span>
                         <div className="mini-bars" aria-hidden>
                             {item.trend.map((point, i) => (
                                 <span
                                     key={`${item.label}-${point}-${i}`}
-                                    style={{ height: `${point * 4}px` }}
+                                    style={{ 
+                                        height: isLoaded ? `${point * 4}px` : "0px",
+                                        transitionDelay: `${i * 0.1}s` 
+                                    }}
                                     className={item.danger ? "mini-bar danger" : "mini-bar"}
                                 />
                             ))}
@@ -56,38 +88,50 @@ export default function DashboardOverview() {
             </div>
 
             <div className="overview-grid">
+                {/* Line Chart Section */}
                 <article className="panel-card chart-card">
                     <div className="panel-header">
                         <h2>Weekly Engagement Trend</h2>
                         <span>Updated 5 min ago</span>
                     </div>
                     <div className="line-chart-wrap">
-                        <svg viewBox="0 0 324 100" className="line-chart" role="img" aria-label="Weekly engagement trend">
-                            <polyline className="line-chart-shadow" points={toPoints(engagementData.map((value) => value - 8))} />
-                            <polyline className="line-chart-main" points={toPoints(engagementData)} />
+                        <svg viewBox="0 0 324 100" className="line-chart">
+                            <polyline 
+                                className="line-chart-shadow" 
+                                points={toPoints(engagementData.map((v) => v - 8))} 
+                            />
+                            <polyline 
+                                className="line-chart-main animate-line" 
+                                points={toPoints(engagementData)} 
+                            />
                         </svg>
                         <div className="chart-label-row">
-                            {engagementDays.map((day) => (
-                                <span key={day}>{day}</span>
-                            ))}
+                            {engagementDays.map((day) => <span key={day}>{day}</span>)}
                         </div>
                     </div>
                 </article>
 
+                {/* Conversion Funnel Section */}
                 <article className="panel-card">
                     <div className="panel-header">
                         <h2>Conversion Funnel</h2>
                         <span>7-day window</span>
                     </div>
                     <div className="funnel-list">
-                        {conversionFunnel.map((item) => (
+                        {conversionFunnel.map((item, index) => (
                             <div key={item.stage} className="funnel-row">
                                 <div className="funnel-meta">
                                     <strong>{item.stage}</strong>
                                     <span>{item.count}</span>
                                 </div>
                                 <div className="funnel-track">
-                                    <div className="funnel-fill" style={{ width: `${item.width}%` }} />
+                                    <div 
+                                        className="funnel-fill animated-fill" 
+                                        style={{ 
+                                            width: isLoaded ? `${item.width}%` : "0%",
+                                            transitionDelay: `${index * 0.15}s`
+                                        }} 
+                                    />
                                 </div>
                             </div>
                         ))}
@@ -95,14 +139,15 @@ export default function DashboardOverview() {
                 </article>
             </div>
 
+            {/* Activity Feed */}
             <article className="panel-card">
                 <div className="panel-header">
                     <h2>Operational Highlights</h2>
                     <span>Today</span>
                 </div>
                 <ul className="panel-list">
-                    {activityFeed.map((item) => (
-                        <li key={item}>{item}</li>
+                    {activityFeed.map((item, i) => (
+                        <li key={item} style={{ animationDelay: `${i * 0.2}s` }}>{item}</li>
                     ))}
                 </ul>
             </article>
