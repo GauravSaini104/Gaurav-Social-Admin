@@ -9,7 +9,8 @@ const SpamControl = () => {
   const [loading, setLoading] = useState(true);
   const [selectedReport, setSelectedReport] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+const [isDeleteModal, setIsDeleteModal] = useState(false);
+const [deleteUserId, setDeleteUserId] = useState(null);
   const headers = {
     Authorization: `Bearer ${TOKEN}`,
     "Content-Type": "application/json",
@@ -148,7 +149,10 @@ const SpamControl = () => {
                     <div style={styles.actionBtns}>
                       <button className="btn btn-view" onClick={() => handleViewDetail(report._id)}>View</button>
                       <button className="btn btn-deactivate" onClick={() => handleDeactivate(report.reportedUser?._id)}>Block</button>
-                      <button className="btn btn-delete" onClick={() => handleDelete(report.reportedUser?._id)}>Delete</button>
+                   <button className="btn btn-delete" onClick={() => { setDeleteUserId(report.reportedUser?._id); setIsDeleteModal(true); }}
+>
+  Delete
+</button>
                     </div>
                   </td>
                 </tr>
@@ -193,6 +197,38 @@ const SpamControl = () => {
           </div>
         </div>
       )}
+      {isDeleteModal && (
+  <div className="modal-overlay">
+    <div className="modal-content">
+      <div className="modal-header">
+        <h3>Confirm Delete</h3>
+        <button onClick={() => setIsDeleteModal(false)} className="close-x">
+          &times;
+        </button>
+      </div>
+
+      <div className="modal-body">
+        <p>Are you sure you want to permanently delete this user?</p>
+      </div>
+
+      <div className="modal-footer">
+        <button
+          className="btn btn-delete"
+          onClick={() => {
+            handleDelete(deleteUserId);
+            setIsDeleteModal(false);
+          }}
+        >
+          Yes, Delete
+        </button>
+
+        <button className="btn btn-view" onClick={() => setIsDeleteModal(false)}>
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+)}
     </div>
   );
 };
