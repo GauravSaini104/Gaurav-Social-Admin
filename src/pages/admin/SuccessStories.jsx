@@ -10,7 +10,9 @@ export default function SuccessStoriesPage() {
   // Previews: UI mein dikhane ke liye (Existing URLs + New Blob URLs)
   const [previews, setPreviews] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
-
+const [showDeleteModal, setShowDeleteModal] = useState(false);
+const [deleteId, setDeleteId] = useState(null);
+const [selectedStory, setSelectedStory] = useState(null);
   const [form, setForm] = useState({
     _id: "",
     coupleName: "",
@@ -40,19 +42,17 @@ export default function SuccessStoriesPage() {
     }
   };
 
-  const handleDelete = async (e, id) => {
-    e.stopPropagation();
-    if (!window.confirm("Are you sure?")) return;
-    try {
-      await axios.delete(`${API}/${id}`, {
-        headers: { Authorization: `Bearer ${TOKEN}` },
-      });
-      fetchStories();
-    } catch (err) {
-      alert("Delete failed!");
-    }
-  };
-
+ const handleDelete = async () => {
+  try {
+    await axios.delete(`${API}/${deleteId}`, {
+      headers: { Authorization: `Bearer ${TOKEN}` },
+    });
+    setShowDeleteModal(false);
+    fetchStories();
+  } catch (err) {
+    alert("Delete failed!");
+  }
+};
   const openEditModal = (e, story) => {
     e.stopPropagation();
     setIsEditing(true);
@@ -174,12 +174,36 @@ export default function SuccessStoriesPage() {
       </div>
 
       {loading && !showModal && <div style={styles.loader}>Shining up the stories...</div>}
+{showDeleteModal && (
+  <div style={styles.modalOverlay}>
+    <div style={{ ...styles.modal, textAlign: "center" }}>
+      <h2 style={{ color: "#ff4444" }}>Delete Story?</h2>
+      <p style={{ color: "#aaa" }}>This action cannot be undone.</p>
+
+      <div style={{ display: "flex", justifyContent: "center", gap: "20px", marginTop: "20px" }}>
+        <button
+          style={{ ...styles.submitBtn, background: "#ff4444" }}
+          onClick={handleDelete}
+        >
+          Yes, Delete
+        </button>
+
+        <button
+          style={{ ...styles.submitBtn, background: "#333" }}
+          onClick={() => setShowDeleteModal(false)}
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+)}
 
       {showModal && (
         <div style={styles.modalOverlay}>
-          <div style={styles.modal}>
+          <div style={{ ...styles.modal, width: "90%", maxWidth: "750px", maxHeight: "85vh", overflowY: "auto", padding: "35px" }}>
             <div style={styles.modalHeader}>
-              <h2 style={{ margin: 0, color: "#FFD700" }}>
+              <h2 style={{ margin: 0, color: "#FFD700" ,fontSize: "28px"}}>
                 {isEditing ? "Edit Success Story" : "Create Story"}
               </h2>
               <button style={styles.closeBtn} onClick={() => setShowModal(false)}>✕</button>
@@ -240,6 +264,48 @@ export default function SuccessStoriesPage() {
         </div>
       )}
 
+{selectedStory && (
+  <div style={styles.modalOverlay}>
+    <div style={styles.modal}>
+      <div style={styles.modalHeader}>
+        <h2 style={{ color: "#FFD700" }}>
+          {selectedStory.coupleName}
+        </h2>
+        <button 
+          style={styles.closeBtn}
+          onClick={() => setSelectedStory(null)}
+        >
+          ✕
+        </button>
+      </div>
+
+      <p style={{ color: "#aaa" }}>
+        📍 {selectedStory.location}
+      </p>
+
+<p style={{ color: "#aaa" }}>
+  ⏳ {selectedStory.yearsTogether}
+</p>
+      <p style={{ color: "#aaa" }}>
+        📅 {new Date(selectedStory.marriageDate).toDateString()}
+      </p>
+
+      <p style={{ color: "#fff", marginTop: "10px" }}>
+        {selectedStory.story}
+      </p>
+
+      <div style={{ display: "flex", gap: "10px", flexWrap: "wrap", marginTop: "15px" }}>
+        {selectedStory.images?.map((img, i) => (
+          <img 
+            key={i}
+            src={img}
+            style={{ width: "100px", height: "100px", objectFit: "cover", borderRadius: "8px" }}
+          />
+        ))}
+      </div>
+    </div>
+  </div>
+)}
       {/* RENDER LIST */}
       <div style={styles.grid}>
         {stories.map((s) => (
@@ -249,8 +315,16 @@ export default function SuccessStoriesPage() {
               <div style={styles.cardBadge}>{s.yearsTogether}</div>
               <div style={styles.actionOverlay}>
                 <button style={styles.miniBtnEdit} onClick={(e) => openEditModal(e, s)}><Edit3 size={16} /></button>
-                <button style={styles.miniBtnDelete} onClick={(e) => handleDelete(e, s._id)}><Trash2 size={16} /></button>
-              </div>
+<button 
+  style={styles.miniBtnDelete} 
+  onClick={(e) => {
+    e.stopPropagation();
+    setDeleteId(s._id);
+    setShowDeleteModal(true);
+  }}
+>
+  <Trash2 size={16} />
+</button>              </div>
             </div>
             <div style={styles.cardContent}>
               <h3 style={styles.cardTitle}>{s.coupleName}</h3>
@@ -259,8 +333,12 @@ export default function SuccessStoriesPage() {
                 <span>📅 {new Date(s.marriageDate).toLocaleDateString()}</span>
               </div>
               <p style={styles.cardStory}>{s.story.substring(0, 80)}...</p>
-              <button style={styles.readMore}>Read Full Story →</button>
-            </div>
+<button 
+  style={styles.readMore} 
+  onClick={() => setSelectedStory(s)}
+>
+  Read Full Story →
+</button>            </div>
           </div>
         ))}
       </div>
@@ -292,16 +370,16 @@ const styles = {
   modalHeader: { display: "flex", justifyContent: "space-between", marginBottom: "25px" },
   formGrid: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" },
   inputGroup: { display: "flex", flexDirection: "column", gap: "8px" },
-  label: { fontSize: "0.85rem", color: "#888" },
-  input: { background: "#252525", border: "1px solid #333", padding: "12px", borderRadius: "10px", color: "#fff" },
-  textarea: { background: "#252525", border: "1px solid #333", padding: "12px", borderRadius: "10px", color: "#fff", resize: "none" },
+  label: { fontSize: "1rem", color: "#888" },
+  input: { fontSize: "1rem",background: "#252525", border: "1px solid #333", padding: "12px", borderRadius: "10px", color: "#fff" },
+  textarea: { fontSize: "1rem",background: "#252525", border: "1px solid #333", padding: "12px", borderRadius: "10px", color: "#fff", resize: "none" },
   fileInputWrapper: { border: "1px dashed #444", padding: "15px", borderRadius: "12px", textAlign: "center", position: "relative", background: "#222" },
   fileInput: { position: "absolute", inset: 0, opacity: 0, cursor: "pointer" },
   previewContainer: { display: "flex", gap: "12px", marginTop: "15px", flexWrap: "wrap", gridColumn: "span 2" },
   previewWrapper: { position: "relative", width: "65px", height: "65px" },
   previewImg: { width: "100%", height: "100%", borderRadius: "8px", objectFit: "cover", border: "1px solid #444" },
   removeImgBtn: { position: "absolute", top: "-5px", right: "-5px", background: "#ff4444", color: "#fff", border: "none", borderRadius: "50%", width: "20px", height: "20px", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 2px 5px rgba(0,0,0,0.5)" },
-  submitBtn: { gridColumn: "span 2", background: "linear-gradient(45deg, #FFD700, #FFA500)", border: "none", padding: "15px", borderRadius: "12px", fontWeight: "bold", cursor: "pointer" },
+  submitBtn: { gridColumn: "span 2",   fontSize: "1.1rem" ,background: "linear-gradient(45deg, #FFD700, #FFA500)", border: "none", padding: "15px", borderRadius: "12px", fontWeight: "bold", cursor: "pointer" },
   closeBtn: { background: "#333", border: "none", color: "#fff", width: "30px", height: "30px", borderRadius: "50%", cursor: "pointer" },
   loader: { textAlign: "center", padding: "50px", color: "#FFD700" }
 };      

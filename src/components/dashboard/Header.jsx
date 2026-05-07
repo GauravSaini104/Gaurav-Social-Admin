@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-
+import "./Header.css";
 const navItems = [
   { to: "/dashboard", label: "Overview", icon: "📊" },
   { to: "/dashboard/users", label: "Members", icon: "👥" },
@@ -16,7 +16,11 @@ const navItems = [
 export default function Header({ onToggleSidebar }) {
   const navigate = useNavigate();
   const [profile, setProfile] = useState(null);
+const [showNotifications, setShowNotifications] = useState(false);
 
+const toggleNotifications = () => {
+  setShowNotifications((prev) => !prev);
+};
   // ✅ load from localStorage first (fast render)
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -96,14 +100,25 @@ export default function Header({ onToggleSidebar }) {
   </div>
 
   {/* Notification Button with Animation Wrapper */}
-  <button className="premium-icon-btn notification-wrapper" type="button">
+  <button
+  className="premium-icon-btn notification-wrapper"
+  type="button"
+  onClick={toggleNotifications}
+>
+  
     <svg viewBox="0 0 24 24" className="premium-icon-svg" fill="none" stroke="currentColor" strokeWidth="2">
       <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
       <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
     </svg>
     <span className="notification-glow-badge">3</span>
   </button>
-
+{showNotifications && (
+  <div className="notification-dropdown">
+    <p>🔔 New user registered</p>
+    <p>💬 New message received</p>
+    <p>⚠️ System update available</p>
+  </div>
+)}
   {/* Profile with subtle glow */}
   <button className="premium-profile-trigger" type="button">
   <div className="avatar-wrapper">

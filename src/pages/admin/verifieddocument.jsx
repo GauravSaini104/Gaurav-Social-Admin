@@ -56,14 +56,12 @@ const VerifiedDocument = () => {
   return (
     <>
       <style>{`
-        .admin-wrap { background: #000; color: #fff; font-family: 'Inter', sans-serif; padding: 20px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
+   
+        .admin-wrap { background: #000; color: #fff; font-family: 'Inter', system-ui, sans-serif; padding: 20px; }        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
         
-        /* Card UI */
-        .u-card { background: #111; border: 1px solid #222; border-radius: 15px; padding: 15px; transition: 0.3s; }
-        .u-card:hover { border-color: #ffcc00; }
-        .u-name { font-size: 18px; font-weight: bold; color: #ffcc00; margin-bottom: 5px; }
-        
+  .u-card { background: #111; border: 1px solid #333333; border-radius: 15px; padding: 15px; transition: 0.3s; }
+.u-card:hover { border-color: #3b82f6; }
+.u-name { font-size: 18px; font-weight: bold; color: #3b82f6; margin-bottom: 5px; }     
         /* Image Thumbnails */
         .img-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0; }
         .thumb-box { text-align: center; cursor: pointer; position: relative; }
@@ -73,39 +71,35 @@ const VerifiedDocument = () => {
 
         /* Full Screen Image Popup */
         .img-popup-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.95); z-index: 2000; display: flex; justify-content: center; align-items: center; cursor: zoom-out; }
-        .img-popup-content { max-width: 90%; max-height: 90%; border: 3px solid #ffcc00; border-radius: 10px; animation: pop 0.3s ease; }
-        @keyframes pop { from { transform: scale(0.8); } to { transform: scale(1); } }
+.img-popup-content { max-width: 90%; max-height: 90%; border: 2px solid #333333; border-radius: 10px; animation: pop 0.3s ease; }        @keyframes pop { from { transform: scale(0.8); } to { transform: scale(1); } }
 
         /* Detail Modal */
         .modal { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.8); z-index: 1500; display: flex; justify-content: flex-end; }
-        .modal-side { width: 100%; max-width: 500px; background: #111; height: 100%; overflow-y: auto; border-left: 2px solid #ffcc00; padding: 25px; animation: slide 0.4s ease; }
-        @keyframes slide { from { transform: translateX(100%); } to { transform: translateX(0); } }
+.modal-side { width: 100%; max-width: 500px; background: #111; height: 100%; overflow-y: auto; border-left: 1px solid #333333; padding: 25px; animation: slide 0.4s ease; }        @keyframes slide { from { transform: translateX(100%); } to { transform: translateX(0); } }
 
         /* Action Buttons */
         .verify-row { background: #1a1a1a; padding: 15px; border-radius: 10px; margin-bottom: 15px; border: 1px solid #333; }
         .verify-label { display: block; color: #ffcc00; font-weight: bold; margin-bottom: 10px; font-size: 14px; }
         .btn-group { display: flex; gap: 10px; }
         .btn-mini { flex: 1; padding: 8px; border-radius: 6px; border: none; cursor: pointer; font-weight: bold; font-size: 12px; }
-        .btn-app { background: #ffcc00; color: #000; }
-        .btn-rej { background: transparent; color: #ff4444; border: 1px solid #ff4444; }
+.btn-app { background: #3b82f6; color: #ffffff; }
+.btn-full-app { width: 100%; background: #3b82f6; color: #ffffff; padding: 15px; border: none; border-radius: 10px; font-weight: 600; margin-top: 20px; cursor: pointer; font-size: 16px; }        .btn-rej { background: transparent; color: #ff4444; border: 1px solid #ff4444; }
         
-        .btn-full-app { width: 100%; background: #ffcc00; color: #000; padding: 15px; border: none; border-radius: 10px; font-weight: 900; margin-top: 20px; cursor: pointer; font-size: 16px; }
         .close-x { float: right; color: #ffcc00; font-size: 24px; cursor: pointer; }
 
         .info-tag { font-size: 12px; color: #aaa; margin-bottom: 4px; }
-        .section-h { border-bottom: 1px solid #222; padding-bottom: 5px; margin: 20px 0 10px; color: #ffcc00; font-size: 14px; text-transform: uppercase; }
-      `}</style>
-
-      <SectionPage
-        title="Admin Document Control"
-        description="Click on any image to zoom. Review individual documents and approve."
-        points={[
-          { title: "Zoom Feature", text: "Click on ID or Selfie to view full screen." },
-          { title: "Split Approval", text: "You can approve ID but reject selfie if needed." },
-          { title: "Security", text: "Always match Selfie with the ID Photo." },
-        ]}
-      />
-
+.section-h { border-bottom: 1px solid #333333; color: #ffffff; font-weight: 600; }      `}</style>
+<div style={{ marginTop: "40px" }}>
+     <SectionPage
+  title="Admin Document Control"
+  description="Click on any image to zoom. Review individual documents and approve."
+ points={[
+  { title: "🔍 Zoom Feature", text: "Click on ID or Selfie to view full screen.", className: "feature-card" },
+  { title: " Split Approval", text: "You can approve ID but reject selfie if needed.", className: "feature-card" },
+  { title: "🛡️ Security", text: "Always match Selfie with the ID Photo.", className: "feature-card" },
+]}
+/>
+</div>
       <div className="admin-wrap">
         {loading ? (
           <div style={{textAlign: 'center', padding: '50px', color: '#ffcc00'}}>Fetching pending requests...</div>

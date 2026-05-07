@@ -10,3 +10,36 @@ body,
   margin: 0;
   padding: 0;
 }
+.notification-wrapper {
+  position: relative;
+}
+
+/* popup box */
+.notification-dropdown {
+  position: absolute;
+  top: 45px;
+  right: 0;
+  width: 200px;
+  background: #fff;
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 13px;
+}
+
+/* each item */
+.notification-dropdown p {
+  margin: 0;
+  padding: 6px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.notification-dropdown p:hover {
+  background: #f3f3f3;
+}
